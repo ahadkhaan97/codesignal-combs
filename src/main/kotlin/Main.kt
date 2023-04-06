@@ -3,21 +3,22 @@ fun main() {
 }
 
 fun solution(comb1: String, comb2: String): Int {
-    val minComb1 = comb1.indexOf('*')
-    val maxComb1 = comb1.lastIndexOf('*')
-    val minComb2 = comb2.indexOf('*')
-    val maxComb2 = comb2.lastIndexOf('*')
+    return minOf(findPurseLength(comb1, comb2), findPurseLength(comb2, comb1))
+}
 
-    val minIndex = minOf(minComb1, minComb2)
-    val maxIndex = maxOf(maxComb1, maxComb2)
-
-    var purseLength = maxIndex - minIndex + 1
-
-    for (i in minIndex..maxIndex) {
-        if (comb1.getOrNull(i) != '*' || comb2.getOrNull(i - minIndex) != '*') {
-            purseLength++
+fun findPurseLength(comb1: String, comb2: String): Int {
+    for (i in comb1.indices) {
+        if (comb1[i] == '.') {
+            for (j in comb2.indices) {
+                if (comb2[j] == '*' && comb1[i+j] == '*') {
+                    break
+                }
+                if (j == comb2.length - 1 || i+j == comb1.length-1) {
+                    return maxOf(comb1.length, i + comb2.length)
+                }
+            }
         }
     }
-
-    return purseLength
+    return comb1.length + comb2.length
 }
+
